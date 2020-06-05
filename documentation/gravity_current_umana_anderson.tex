@@ -360,6 +360,87 @@ along with a self consistent initial leading-edge position
 As noted above, this corresponds to an initial shape with dimensionless volume $\bar{q}_{UA}$.
 
 
+\subsection{Summary of Horizontal Substrate, Fixed Volume}
+
+\bea
+\frac{\partial \bar{h}}{\partial \bar{t}} & = & \frac{\partial}{\partial \bar{x}} \left[ \bar{f}(\bar{h}) \left( \frac{\partial \bar{h}}{\partial \bar{x}} \right) \right],
+\eea
+where
+\bea
+\bar{f}(\bar{h}) & = & \frac{1}{3} \bar{h}^3 + \bar{\beta}_0 \bar{h}^2 + ( \bar{\beta}_1 + \bar{\beta}_2 ) \bar{h},
+\eea
+and
+\bea
+\left. \frac{\partial \bar{h}}{\partial \bar{x}} \right|_{\bar{x}=0} & = & 0,
+\eea
+along with $\bar{h}(\bar{x}=\bar{x}_N,\bar{t}) = 0$ and
+\bea
+\frac{d\bar{x}_N}{d\bar{t}} & = & - ( \bar{\beta}_1 + \bar{\beta}_2 ) \left. \frac{\partial \bar{h}}{\partial \bar{x}} \right|_{\bar{x}=\bar{x}_N},
+\eea
+
+Transforming this to a fixed domain with the variable $s = x/x_N(t)$ gives (and dropping the 'bar' notation)
+
+\bea
+\label{eq:h_fixed_domain}
+\frac{\partial h}{\partial t} & = & \frac{s}{x_N} \frac{dx_N}{dt} \frac{\partial h}{\partial s} + \frac{1}{x_N^2} \frac{\partial}{\partial s} \left[ f(h)\frac{\partial h}{\partial s} \right], \hspace{0.25in} \mbox{on $0 < s < 1$},\\
+\label{eq:bc1_fixed_domain}
+\frac{\partial h}{\partial s}(s=0,t) & = & 0,\\
+\label{eq:bc2_fixed_domain}
+h(s=1) & = & 0,
+\eea
+where
+\bea
+\label{eq:bc3_fixed_domain}
+\frac{dx_N}{dt} & = &  - ( \beta_1 + \beta_2 ) \frac{1}{x_N} \left. \frac{\partial h}{\partial s} \right|_{s=1}.
+\eea
+
+Next, introduce a domain re-mapping to focus grid points near the leading edge of the gravity current.  Specifically, we introduce a new spatial coordinate $r$ related to $s$
+by
+\bea
+s & = & \frac{1- \exp (-\lambda r)}{1 - \exp (-\lambda)},
+\eea
+or equivalently
+\bea
+r & = & - \frac{1}{\lambda} \ln \left[ 1 - s (1-e^{-\lambda}) \right],
+\eea
+this function is the one used by Dalwadi {\it et al.} \cite{Dalwadi_etal_2020} as a means to focus points in the region of the domain where rapid variation occurs.  In particular, 
+here we make use of this numerically, and introduce a set of points $r_i$ that are uniform on $[0,1]$ so that the corresponding points $s_i$ are non-uniformly distributed with 
+more resolution near $r=s=1$ (i.e. $x=x_N$) for larger and larger values of the parameter $\lambda$.  In our numerical investigations, values of $\lambda$ up to about $9$ were investigated.  
+The introduction of a transformed variable requires a further conversion of the equations via 
+\bea
+\frac{d}{ds} \rightarrow \frac{d}{dr} \frac{dr}{ds},
+\eea
+where 
+\bea
+\frac{dr}{ds} & = & \frac{ 1 - \exp(-\lambda) } {\lambda  (1 - s(1 - \exp(-\lambda)))}.
+\eea
+
+This leads to the modified system
+\bea
+\label{eq:h_fixed_domain_drds}
+\frac{\partial h}{\partial t} & = & \frac{s}{x_N} \frac{dx_N}{dt} \frac{dr}{ds} \frac{\partial h}{\partial r} + \frac{1}{x_N^2} \frac{dr}{ds} \frac{\partial}{\partial r} \left[ f(h) \frac{dr}{ds} \frac{\partial h}{\partial r} \right], \hspace{0.25in} \mbox{on $0 < r < 1$},\\
+\label{eq:bc1_fixed_domain_drds}
+\frac{\partial h}{\partial r}(r=0,t) & = & 0,\\
+\label{eq:bc2_fixed_domain_drds}
+h(r=1) & = & 0,
+\eea
+where
+\bea
+\label{eq:bc3_fixed_domain_drds}
+\frac{dx_N}{dt} & = & - ( \beta_1 + \beta_2 ) \frac{1}{x_N} \frac{dr}{ds} \left. \frac{\partial h}{\partial r} \right|_{r=1}.
+\eea
+Note that in this final expression $dr/ds$ is also evaluated at $r=1$ (where $s=1$) and we have
+\bea
+\left. \frac{dr}{ds} \right|_{r=1} & = & \frac{1}{\lambda} \left( e^\lambda - 1 \right).
+\eea
+
+In our numerical codes {\tt gc\_molND\_nonuniform\_s.m} and {\tt gc\_rhsNC\_nonuniform\_s.m} we introduce equally-spaced points in terms of the variable $r$ which 
+allows relatively straightforward expression of derivatives in terms of finite differences but with the grid points in terms of $s$ (and hence $x = s x_N(t)$) more tightly
+spaced near the leading edge of the gravity current.
+
+
+
+
 
 \section{Notes on Small $\beta$ expansion: \today}
 
@@ -513,7 +594,7 @@ The outer solution applies on $0 < x < x_M(t)$ and it will be convenient to map 
 \label{eq:outer_h_fixed_domain}
 \frac{\partial h}{\partial t} & = & \frac{s}{x_M} \frac{dx_M}{dt} \frac{\partial h}{\partial s} + \frac{1}{x_M^2} \frac{\partial}{\partial s} \left[ f(h)\frac{\partial h}{\partial s} \right], \hspace{0.25in} \mbox{on $0 < s < 1$},\\
 \label{eq:outer_bc1_fixed_domain}
-\frac{\partial h}{\partial x}(s=0,t) & = & 0,\\
+\frac{\partial h}{\partial s}(s=0,t) & = & 0,\\
 \label{eq:outer_bc2_fixed_domain}
 h(s=1) & = & h_M,
 \eea
@@ -524,6 +605,38 @@ where
 \eea
 Note that the PDE in~(\ref{eq:outer_h_fixed_domain}) requires that we have access to $x_M$ and $dx_M/dt$, while the boundary condition~(\ref{eq:outer_bc3_fixed_domain}) 
 expresses the equation for the evolution of the actual leading-edge location $x_N(t)$.
+
+Converting this to a domain in which non-equally-spaced points can be implemented using the same relationship between $r$ and $s$ as used earlier gives
+This leads to the modified system
+\bea
+\label{eq:outer_h_fixed_domain_drds}
+\frac{\partial h}{\partial t} & = & \frac{s}{x_M} \frac{dx_M}{dt} \frac{dr}{ds} \frac{\partial h}{\partial r} + \frac{1}{x_M^2} \frac{dr}{ds} \frac{\partial}{\partial r} \left[ f(h) \frac{dr}{ds} \frac{\partial h}{\partial r} \right], \hspace{0.25in} \mbox{on $0 < r < 1$},\\
+\label{eq:outer_bc1_fixed_domain_drds}
+\frac{\partial h}{\partial r}(r=0,t) & = & 0,\\
+\label{eq:outer_bc2_fixed_domain_drds}
+h(r=1) & = & h_M,
+\eea
+where
+\bea
+\label{eq:outer_bc3_fixed_domain_drds}
+\frac{dx_N}{dt} & = & - \beta \left( \frac{1}{3} H^2_M + 1 \right)  \frac{1}{x_M} \frac{dr}{ds} \left. \frac{\partial h}{\partial r} \right|_{r=1}.
+\eea
+Here, as before, we have
+\bea
+s & = & \frac{1- \exp (-\lambda r)}{1 - \exp (-\lambda)},
+\eea
+or equivalently
+\bea
+r & = & - \frac{1}{\lambda} \ln \left[ 1 - s (1-e^{-\lambda}) \right],
+\eea
+and
+\bea
+\frac{dr}{ds} & = & \frac{ 1 - \exp(-\lambda) } {\lambda  (1 - s(1 - \exp(-\lambda)))}.
+\eea
+Again the idea is to implement this numerically using a uniform grid with respect to the variable $r$, which gives a nonuniformly distributed set of points in terms of
+$s$ (and $x= s x_M(t)$) which give more resolution near the leading-edge of the gravity current as the parameter $\lambda$ is increased.
+
+
 
 
 {\bf Outline of algorithm: {\color{red}{DMA still thinking about some of these ideas ...}}}
@@ -540,8 +653,8 @@ observe that if $\zeta_M$ is fixed throughout the calculation it follows from eq
 \bea
 \frac{\partial h}{\partial x}(x=x_M(t_i),t_i)  = \frac{1}{x_M} \frac{\partial h}{\partial s}(s=1,t_i)& = & - \frac{1}{\beta} \frac{H_M \left( \frac{1}{9} H_M^2 + 1 \right) }{ \left( \frac{1}{3} H_M^2 + 1 \right) \zeta_M }.
 \eea
-At this point we must verify that the right-hand-side of this expression, which is known since values for $H_M$ and $\zeta_M$ are already specified.
-Also, however, the profile $h(s,t_i)$ defines, say by a finite difference approximation, the derivative $\frac{\partial h}{\partial x}(x=x_M(t_i),t_i)$.  Thus, we
+At this point we must verify that the right-hand-side of this expression, which is known since values for $H_M$ and $\zeta_M$ are already specified, matches the left-hand-side.
+That is, observe that the known profile $h(s,t_i)$ defines, say by a finite difference approximation, the derivative $\frac{\partial h}{\partial x}(x=x_M(t_i),t_i)$.  Thus, we
 must specify a tolerance within which these two quantities must agree.  If they fall outside of the tolerance, then some further iteration must be taken to 
 achieve the required agreement.
 %
