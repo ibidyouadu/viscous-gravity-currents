@@ -1,0 +1,675 @@
+%\documentstyle[12pt,myomy,fullpage,titlepage]{article}
+%\documentstyle[12pt,my_pof,fullpage]{article}
+\documentclass[11pt]{article}
+\usepackage{amsfonts}
+\usepackage{latexsym}
+%\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage{epsf}
+\usepackage{color}
+\pagestyle{plain}
+
+\sloppy
+%
+\textheight 21cm
+\textwidth  15.5cm
+\evensidemargin 0.5cm
+\oddsidemargin  0.5cm
+%
+\topmargin 0pt
+
+%%%%
+\newcommand{\bea}{\begin{eqnarray}}
+\newcommand{\eea}{\end{eqnarray}}
+\newcommand{\bsa}{\begin{subeqnarray}}
+\newcommand{\esa}{\end{subeqnarray}}
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+
+
+
+%\input{psfig}
+
+%%%%
+\begin{document}
+\baselineskip=24pt
+
+
+%
+\title{Modeling Lava Flow with Slip}
+%
+\author{Angel Umana and Daniel M. Anderson \\ \\
+Department of Mathematical Sciences \\
+George Mason University \\
+Fairfax, VA 22030, USA}
+%
+\date{Last update: \today}
+%
+\maketitle
+\begin{abstract}
+Abstract goes here ...
+
+\bigskip\noindent
+{\bf AMS subject classifications:} ..., 
+
+\bigskip\noindent
+{\bf Keywords:} gravity current, ...
+\end{abstract}
+
+\section{Introduction}
+
+We consider a gravity current flowing down an inclined plane, where $\theta$ is the angle with respect to the horizontal.  We assume that the flow is confined to a rectangular 
+channel of width $W$.  The downstream direction is denoted by the positive $x$ axis and the coordinate $z$ denotes
+the height above the inclined surface measured perpendicular to the surface.  For now we assume that the flow is two dimensional so that there is no dependence 
+on the third direction $y$, thus neglecting any ``wall'' effects from the sides of the channel.  We assume that a non-negative volume flux of material is supplied to the gravity current at location $x=0$ and the free surface of the gravity current can be specified as $z=h(x,t)$.  We assume that the leading edge of the gravity current is located at $x=x_N(t)$ where $h=0$.
+
+We assume that the lubrication approximation applies to the flow so that
+\bea
+\label{eq:mom_x}
+0 & = & - \frac{\partial p}{\partial x} + \mu \frac{\partial^2 u}{\partial z^2} + \rho g \sin \theta, \\
+\label{eq:mom_z}
+0 & = & - \frac{\partial p}{\partial z} - \rho g \cos \theta , \\
+\label{eq:continuity}
+0 & = & \frac{\partial u}{\partial x} + \frac{\partial w}{\partial z}.
+\eea
+Boundary conditions applied to this system are
+\bea
+\label{eq:bc1}
+p(x,z=h,t) & = & p_A ,\\
+\label{eq:bc2}
+w(x,z=0,t) & = & 0,\\
+\label{eq:bc3}
+u(x,z=0,t) & = & \beta_0 \left. \frac{\partial u}{\partial z} \right|_{z=0}+ \frac{\beta_1}{h} \left. \frac{\partial u}{\partial z} \right|_{z=0}- \beta_2 \left. \frac{\partial^2 u}{\partial z^2}  \right|_{z=0}, \\
+\label{eq:bc4}
+\frac{\partial u}{\partial z} (x,z=h,t) & = & 0,
+\eea
+where $\beta_0$, $\beta_1$ and $\beta_2$ are nonnegative slip coefficients and the last equation represents a stress free boundary condition (in the lubrication limit).  
+In our slip model here includes three different slip models.  The first term represents the standard Navier-slip boundary condition with slip coefficient $\beta_0$.
+The second term represents a slip model earlier used by Greenspan \cite{Greenspan1978}.
+The third term represents a second-order slip term that is often used in the context of gas flows \cite{H2003}, which seems far from the present context, but we would like to argue
+here that this model may have some utility in the present context as well.  In the context of our model we shall show that the influence of the
+second two slip models represented by nonzero values of $\beta_1$ and/or $\beta_2$ are effectively equivalent and different in nature to the standard Navier-slip model.  
+Nong \& Anderson \cite{NA2010} have recognized that in the context of thin film flows, slip models such as the ones identified here have some comparable influence on the film 
+dynamics to the presence of a porous substrate.
+ As discussed in more detail below, we will be interested primarily in nonzero $\beta_1$ and/or $\beta_2$ but for now leave these slip coefficients arbitrary.  
+  
+ An additional condition is imposed on the volume flux at $x=0$ and takes the form
+\bea
+\label{eq:volume_flux}
+Q_0 & = & W \int_{0}^{h} u(x=0,z,t) dz,
+\eea
+where $W$ represents the width of the current in the third, $y$, direction.  Note that $Q_0$ has units volume per unit time and will be treated as a specified and possibly time dependent 
+quantity.  At the free surface $z=h(x,t)$ we also impose the kinematic condition
+\bea
+\label{eq:kinematic}
+\frac{\partial h}{\partial t} & = & -\frac{\partial h}{\partial x} u(x,z=h,t) + w(x,z=h,t).
+\eea
+Finally, at the leading edge of the gravity current, $x=x_N(t)$, we impose $h=0$.
+
+From equation~(\ref{eq:mom_z}) along with the boundary condition~(\ref{eq:bc1}) we find
+\bea
+p(x,z,t) & = & p_A + \rho g \cos \theta (h- z).
+\eea
+Then, equation~(\ref{eq:mom_x}) is
+\bea
+\mu \frac{\partial^2 u}{\partial z^2} & = & \rho g \cos \theta \frac{\partial h}{\partial x} - \rho g \sin \theta.
+\eea
+Integrating this twice gives
+\bea
+u(x,z,t) & = &  \frac{\rho g \cos \theta}{2\mu} \left( \frac{\partial h}{\partial x} - \tan \theta \right) z^2 + A z + B,
+\eea
+where $A$ and $B$ are integration constants to be determined.  Imposing the slip and stress free boundary conditions in equations~(\ref{eq:bc3}) and~(\ref{eq:bc4}) gives
+\bea
+u(x,z,t) & = &  \frac{\rho g \cos \theta}{\mu} \left( \frac{\partial h}{\partial x} - \tan \theta \right) \left( \frac{1}{2} z^2 - h  z  - \beta_0 h - \beta_1 -  \beta_2 \right),
+\eea
+Integrating the continuity equation~(\ref{eq:continuity}) in $z$, applying boundary condition~(\ref{eq:bc2}) and inserting the result into the kinematic equation~(\ref{eq:kinematic}) gives
+\bea
+\frac{\partial h}{\partial t} & = & - \frac{\partial}{\partial x} \int_0^h u(x,z,t) dz.
+\eea
+Observe that 
+\bea
+\int_0^h u(x,z,t) dz & = & - \frac{\rho g \cos \theta}{\mu} \left( \frac{\partial h}{\partial x} - \tan \theta \right) \left( \frac{1}{3} h^3 + \beta_0 h^2 + (\beta_1 + \beta_2) h \right).
+\eea
+It follows that $h$ satisfies the partial differential equation
+\bea
+\frac{\partial h}{\partial t} & = & \frac{\rho g \cos \theta}{\mu} \frac{\partial}{\partial x} \left[ f(h) \left( \frac{\partial h}{\partial x} - \tan \theta \right) \right],
+\eea
+where 
+\bea
+f(h) & = & \frac{1}{3} h^3 + \beta_0 h^2 + (\beta_1 + \beta_2) h.
+\eea
+Boundary conditions on $h$ come from the flux condition
+\bea
+Q_0 & = & - W \frac{\rho g \cos \theta}{\mu} \left( \left. \frac{\partial h}{\partial x}\right|_{x=0} - \tan \theta \right) \left. f(h) \right|_{x=0},
+\eea
+and 
+\bea
+\label{eq:hzero_bc}
+h(x=x_N(t) ,t) & = & 0.
+\eea
+Examining~(\ref{eq:hzero_bc}) as a function of time and computing its derivative with respect to time gives
+\bea
+\left. \frac{\partial h}{\partial t} \right|_{x=x_N} + \left. \frac{\partial h}{\partial x} \right|_{x=x_N} \frac{dx_N}{dt} & = & 0.
+\eea
+Also observe that
+\bea
+\left. \frac{\partial h}{\partial t} \right|_{x=x_N} & = & \frac{\rho g \cos \theta}{\mu} \frac{\partial}{\partial x} \left[ f(h) \left( \frac{\partial h}{\partial x} - \tan \theta \right) \right]_{x=x_N}, \nonumber \\
+& = & \frac{\rho g \cos \theta}{\mu} \left[ f'(h) \frac{\partial h}{\partial x} \left( \frac{\partial h}{\partial x} - \tan \theta \right) +  f(h) \frac{\partial^2 h}{\partial x^2} \right]_{x=x_N}
+\eea
+Assuming that $\partial h/\partial x$ and $\partial^2 h / \partial x^2$ are bounded at $x=x_N$ and noting that $f(h)=0$ where $h=0$ (at $x=x_N$) while $f'(h) = \beta_1 + \beta_2$ when $h=0$ gives
+\bea
+\left. \frac{\partial h}{\partial t} \right|_{x=x_N} & = & (\beta_1 + \beta_2) \frac{\rho g \cos \theta}{\mu} \left[  \frac{\partial h}{\partial x} \left( \frac{\partial h}{\partial x} - \tan \theta \right) \right]_{x=x_N}.
+\eea
+It follows that
+\bea
+(\beta_1 + \beta_2) \frac{\rho g \cos \theta}{\mu} \left[  \frac{\partial h}{\partial x} \left( \frac{\partial h}{\partial x} - \tan \theta \right) \right]_{x=x_N}
++ \left. \frac{\partial h}{\partial x} \right|_{x=x_N} \frac{dx_N}{dt} & = & 0.
+\eea
+Finally, assuming that $\partial h/\partial x$ is nonzero (and bounded) at $x=x_N$ gives
+\bea
+\frac{dx_N}{dt} & = & -(\beta_1 + \beta_2) \frac{\rho g \cos \theta}{\mu} \left( \frac{\partial h}{\partial x} - \tan \theta \right)_{x=x_N}.
+\eea
+Clearly this result would suggest that $dx_N/dt$ is zero when $\beta_1 + \beta_2=0$, however, the derivation of this result was predicated on the assumption that
+$\partial h/\partial x$ and $\partial^2 h/\partial z^2$ are bounded at $x=x_N$.  We know from the similarity solutions of Takagi \& Huppert\cite{TH2008}, which have zero slip, that this is not the case in general.  The idea
+of the model we pose here is that by assuming nonzero values $\beta_1$ and/or $\beta_2$ we can identify an evolutionary problem for $h(x,t)$ along with its leading edge $x_N$.
+In the limit $\beta_1 + \beta_2 \rightarrow 0$ we anticipate that the slope $\partial h/\partial x$ becomes unbounded as $x \rightarrow x_N$.  We also observe here that the role of the 
+slip coefficient $\beta_0$ appears to be secondary in the sense that it does not directly enter the evolution equation for $x_N$.  Therefore, the approach we propose here necessarily requires a model for slip of a non-standard form that includes the `higher order' slip terms associated with nonzero factors $\beta_1$ and/or $\beta_2$.   Also, in this sense, the two `higher order' slip models appear to have equivalent influence.
+
+\subsection{Model Summary}
+
+We propose to solve
+\bea
+\frac{\partial h}{\partial t} & = & \frac{\rho g \cos \theta}{\mu} \frac{\partial}{\partial x} \left[ f(h) \left( \frac{\partial h}{\partial x} - \tan \theta \right) \right],
+\eea
+on $0 < x < x_N(t)$ where 
+\bea
+f(h) & = & \frac{1}{3} h^3 + \beta_0 h^2 + (\beta_1 + \beta_2) h,
+\eea
+subject to boundary conditions
+\bea
+Q_0 & = & - W \frac{\rho g \cos \theta}{\mu} \left( \left. \frac{\partial h}{\partial x}\right|_{x=0} - \tan \theta \right) \left. f(h) \right|_{x=0}, \\
+h(x=x_N(t) ,t) & = & 0,\\
+\frac{dx_N}{dt} & = & -(\beta_1 + \beta_2) \frac{\rho g \cos \theta}{\mu} \left( \frac{\partial h}{\partial x} - \tan \theta \right)_{x=x_N},
+\eea
+where $Q_0$ is a specified quantity.  Following Takagi \& Huppert \cite{TH2008} we take $Q_0 = \alpha q t^{\alpha -1 }$ where $\alpha \ge 1$ and $q$ is a prescribed constant.
+In particular, the quantity $q$ relates to the gravity current volume in the present context by
+\bea
+q t^{\alpha} & = & W \int_0^{x_N} h(x,t) dx
+\eea
+One special case we shall focus on has $\alpha=0$ (constant volume) in which case $q$ represents the initial volume in the gravity current.
+
+Additionally, we impose initial conditions $h(x,t=0)=h_0(x)$ and $x_N(t=0) = x_N^0$.  For cases in which we draw comparisons to the similarity solutions of Takagi \& Huppert \cite{TH2008}
+we make use of initial conditions that match their similarity solution.  More details for the initial conditions will be given below.
+
+
+
+\section{Nondimensionalization}
+
+We introduce dimensionless variables 
+\bea
+\bar{x} = \frac{x}{L},\quad
+\bar{z} = \frac{z}{H},\quad
+\bar{h} = \frac{h}{H},\quad
+\bar{t} = \frac{t}{T},\quad
+\bar{x}_N = \frac{x_N}{L},
+\eea
+where $L$, $H$, and $T$ are length and time scales to be specified.  Inserting these expressions into our model gives
+\bea
+\frac{\partial \bar{h}}{\partial \bar{t}} & = & \frac{T H^2 \rho g \cos \theta}{\mu L} \frac{\partial}{\partial \bar{x}} \left[ \bar{f}(\bar{h}) \left( \frac{H}{L} \frac{\partial \bar{h}}{\partial \bar{x}} - \tan \theta \right) \right],
+\eea
+where
+\bea
+\bar{f}(\bar{h}) & = & \frac{1}{3} \bar{h}^3 + \frac{\beta_0}{H} \bar{h}^2 + \frac{\beta_1 + \beta_2}{H^2} \bar{h},
+\eea
+Also,
+\bea
+\alpha q \bar{t}^{\alpha - 1} T^{\alpha-1} & = &
+- W \frac{H^3 \rho g \cos \theta}{\mu} \left( \left. \frac{H}{L} \frac{\partial \bar{h}}{\partial \bar{x}}\right|_{x=0} - \tan \theta \right) \left. \bar{f}(\bar{h}) \right|_{\bar{x}=0}, 
+\eea
+along with $\bar{h}(\bar{x}=\bar{x}_N, \bar{t}) =0$, and
+\bea
+\frac{d\bar{x}_N}{d\bar{t}} & = & -\frac{T}{L} (\beta_1 + \beta_2) \frac{\rho g \cos \theta}{\mu} \left( \frac{H}{L} \frac{\partial \bar{h}}{\partial \bar{x}} - \tan \theta \right)_{\bar{x}=\bar{x}_N},
+\eea
+Initial conditions become
+\bea
+\bar{h}(\bar{x},\bar{t}=0) = \bar{h}_0(\bar{x}),\quad
+\bar{x}_N(\bar{t}=0) = \frac{x_N^0}{L},
+\eea
+where $\bar{h}_0 = h_0/H$.
+
+Based on these we make the following choices
+\bea
+\bar{\beta}_0 = \frac{\beta_0}{H},\quad
+\bar{\beta}_1 = \frac{\beta_1}{H^2},\quad
+\bar{\beta}_2 = \frac{\beta_2}{H^2},\quad
+\frac{T \rho g H^2}{\mu L} = 1,\quad
+H = L
+\eea
+
+These choices give
+\bea
+\frac{\partial \bar{h}}{\partial \bar{t}} & = & \cos \theta \frac{\partial}{\partial \bar{x}} \left[ \bar{f}(\bar{h}) \left( \frac{\partial \bar{h}}{\partial \bar{x}} - \tan \theta \right) \right],
+\eea
+where
+\bea
+\bar{f}(\bar{h}) & = & \frac{1}{3} \bar{h}^3 + \bar{\beta}_0 \bar{h}^2 + ( \bar{\beta}_1 + \bar{\beta}_2 ) \bar{h},
+\eea
+and
+\bea
+\alpha \bar{q}_{UA} \bar{t}^{\alpha - 1} & = & - \cos \theta \bar{f}(\bar{h}) \left( \frac{\partial \bar{h}}{\partial \bar{x}} - \tan \theta \right)_{\bar{x}=0},
+\eea
+along with $\bar{h}(\bar{x}=\bar{x}_N,\bar{t}) = 0$ and
+\bea
+\frac{d\bar{x}_N}{d\bar{t}} & = & - ( \bar{\beta}_1 + \bar{\beta}_2 ) \cos \theta \left( \frac{\partial \bar{h}}{\partial \bar{x}} - \tan \theta \right)_{\bar{x}=\bar{x}_N},
+\eea
+where
+\bea
+\bar{q}_{UA} & = & \frac{q T^{\alpha} }{W L^2}.
+\eea
+It remains to make a choice for the length scale $L$.   We do so in the context of the special case considered in the next section.
+
+\section{Test Case: Horizontal Substrate, Fixed Volume}
+
+Takagi \& Huppert \cite{TH2008} identify numerous similarity solutions for their related problem.  Here we focus on their particular case with a horizontal substrate ($\theta=0$, or $H=1$ 
+in their notation) and a fixed volume gravity current ($\alpha=0$).  In this particular case, their model admits the similarity solution given by
+\bea
+h(x,t) & = & \left[ G^{-E_1} \bar{q}_{TH}^{E_3} t^{\alpha E_3 - E_1} \right]^{1/E} \phi(\eta), \\
+\phi(\eta) & = & \left[ \frac{E_2 E_4}{E E_3} \left( \eta_N^{E_3} - \eta^{E_3} \right) \right]^{1/E_4}, 
+\eea
+where
+\bea
+\eta = \frac{x}{\left[ G^{E_2} \bar{q}_{TH}^{E_4} t^{E_2 + \alpha E_4} \right]^{1/E}},\quad
+\eta_N = \left( \frac{E_3 \left( \frac{E E_3}{E_2 E_4} \right)^{E_2/E_4} }{ B \left( \frac{E_1}{E_3}, 1+ \frac{E_2}{E_4}  \right) } \right)^{E_4/E},
+\eea
+and $B(x,y)$ is the beta function defined by
+\bea
+B(x,y) & = & \int_0^1 t^{x-1} (1-t)^{y-1} dt
+\eea
+which can be obtained using {\tt beta(x,y)} in Matlab.
+
+For the particular case of interest here the parameters appearing in these expressions can be obtained from Takagi \& Huppert's general expressions.  We find that
+(using their parameters $\alpha =0$ (fixed volume), $H=1$ (horizontal flow), $n \rightarrow \infty$ (rectangular channel), $b=0$ (uniform cross section))
+\bea
+E_1 = 1,\quad
+E_2 = 1,\quad
+E_3 = 2,\quad
+E_4 = 3,\quad
+E = 5,\quad
+G = \frac{\rho g}{3\mu},\quad
+\bar{q}_{TH} = \frac{q}{W}.
+\eea
+Note that for this particular case with $\alpha=0$ we have the relationship $\bar{q}_{TH} = \bar{q}_{UA} L^2$.
+Inserting these specific values gives the Takagi \& Huppert similarity solution
+\bea
+h(x,t) & = & \left[ G^{-1} \bar{q}_{TH}^{2} t^{-1} \right]^{1/5} \phi(\eta) = \frac{\phi(\eta)}{\left[ (G /\bar{q}_{TH}^{2}) t \right]^{1/5}}, \\
+\phi(\eta) & = & \left[ \frac{3}{10} \left( \eta_N^2 - \eta^2 \right) \right]^{1/3}, 
+\eea
+where
+\bea
+\eta = \frac{x}{\left[ G \bar{q}_{TH}^{3} t \right]^{1/5}},\quad
+\eta_N = \left( \frac{2 \left( \frac{10}{3} \right)^{1/3} }{ B \left( \frac{1}{2}, \frac{4}{3}  \right) } \right)^{3/5}.
+\eea
+
+If we use our nondimensionalization to express this similarity solution we find that
+\bea
+\bar{h}(\bar{x},\bar{t})  =  \left[ \frac{ 3 \bar{q}_{UA}^{2} }{\bar{t} } \right]^{1/5} \phi(\eta), \quad
+\phi(\eta)  =  \left[ \frac{3}{10} \left( \eta_N^2 - \eta^2 \right) \right]^{1/3}, 
+\eea
+where
+\bea
+\eta = \frac{\bar{x}}{\left[ \frac{1}{3} \bar{q}_{UA}^{3} \bar{t} \right]^{1/5}},\quad
+\eta_N = \left( \frac{2 \left( \frac{10}{3} \right)^{1/3} }{ B \left( \frac{1}{2}, \frac{4}{3}  \right) } \right)^{3/5},
+\eea
+and
+\bea
+\bar{x}_N(\bar{t}) & = & \eta_N \left[ \frac{1}{3} \bar{q}_{UA}^{3} \bar{t} \right]^{1/5}
+\eea
+Also note that
+\bea
+\bar{q}_{UA} = \int_0^{\bar{x}_N} \bar{h}(\bar{x},\bar{t}) d\bar{x},
+\eea
+represents the constant dimensionless volume of the gravity current.  
+For the similarity solution
+\bea
+\bar{q}_{UA} & = & \int_0^{\bar{x}_N} \left[ \frac{ 3 \bar{q}_{UA}^{2} }{\bar{t} } \right]^{1/5} \phi(\eta) d\bar{x},
+\eea
+which upon changing integration variables from $\bar{x}$ to $\eta$ reduces to the condition
+\bea
+1 & = & \int_0^{\eta_N} \left[ \frac{3}{10} (\eta_N^2 - \eta^2) \right]^{1/3} d\eta,
+\eea
+which defines the value $\eta_N$ (in agreement with the above formula for $\eta_N$).
+Recall that for this case with $\alpha=0$, we have $\bar{q}_{UA} = q/(W L^2)$ where $q$ represents the initial volume in the gravity current.
+A choice for the length scale $L$ such that $L^2 = q/W$ would represent a length scale (recall we already chose $H=L$) representative of the initial
+volume (or really volume per unit width).  Thus, this would give the dimensionless initial volume $\bar{q}_{UA}=1$.
+
+Our objective is to compare solutions of the model outlined in the previous section that includes the various forms of slip 
+through the slip coefficients $\beta_0$, $\beta_1$, and $\beta_2$ to the predictions of this similarity 
+solution.   To allow that comparison, we shall obtain from this similarity solution an initial condition which can be used 
+for our slip model.  
+
+{\it Initial Condition from Similarity Solution:}  Consider $\bar{t} = \bar{t}_0$ to be some nonzero dimensionless time.  Using the
+similarity solution we can then define an initial profile
+\bea
+h_0(\bar{x}; \bar{t}_0) =  \left[ \frac{ 3 \bar{q}_{UA}^{2} }{\bar{t}_0 } \right]^{1/5} \phi(\eta), \quad
+\phi(\eta)  =  \left[ \frac{3}{10} \left( \eta_N^2 - \eta^2 \right) \right]^{1/3},
+\eea
+along with a self consistent initial leading-edge position
+\bea
+\bar{x}_N(\bar{t}_0) & = & \eta_N \left[ \frac{1}{3} \bar{q}_{UA}^{3} \bar{t}_0 \right]^{1/5}
+\eea
+As noted above, this corresponds to an initial shape with dimensionless volume $\bar{q}_{UA}$.
+
+
+
+\section{Notes on Small $\beta$ expansion: \today}
+
+{\color{red}{DMA: Still need to edit this part ... May 2020}}
+
+\subsection{Gravity Current Model With Slip}
+
+For the gravity current problem we consider the special case of $\theta =0$ (horizontal bottom surface) and fixed volume gravity current
+\bea
+\frac{\partial h}{\partial t} & = & \frac{\partial }{\partial x} \left[ f(h) \frac{\partial h}{\partial x} \right],\hspace{0.25in}\mbox{for $0 < x < x_N(t)$},
+\eea
+where
+\bea
+f(h) & = & \frac{1}{3} h^3 + \beta_0 h^2 + (\beta_1 + \beta_2) h,
+\eea
+and $\beta_0$, $\beta_1$ and $\beta_2$ are slip coefficients arising from a general slip condition of the form
+\bea
+u = \beta_0 \left. \frac{\partial u}{\partial z} \right|_{z=0}+ \frac{\beta_1}{h} \left. \frac{\partial u}{\partial z} \right|_{z=0}- \beta_2 \left. \frac{\partial^2 u}{\partial z^2}  \right|_{z=0}
+\eea
+In this analysis we are only interested in nonzero $\beta_1$ and/or $\beta_2$ and so we define $\beta = \beta_1 + \beta_2$ and set $\beta_0=0$.
+This gives $f(h) = \frac{1}{3} h^3 + \beta h$.
+The PDE is subject to boundary conditions
+\bea
+\frac{dx_N}{dt} & = & - \beta \left. \frac{\partial h}{\partial x} \right|_{x=x_N(t)},\\
+h(x=x_N) & = & 0, \\
+\frac{\partial h}{\partial x}(x=0,t) & = & 0.
+\eea
+The last condition listed here is a special case of a more general condition that imposes a nonzero, possibly time-dependent, flux at the inlet $x=0$.
+
+\subsection{Inner Solution for $\beta \rightarrow 0$}
+
+We are interested in the solution of this problem in the limit of $\beta \rightarrow 0$ where Takagi \& Huppert have identified similarity solutions.  Those solutions have
+infinite derivative, $\partial h/\partial x$ at the leading edge of the gravity current $x=x_N(t)$ and our numerical solution approach becomes more and more difficult to resolve  in this limit.  Therefore, we are interested in exploring an asymptotic option in which we extract the local solution near $x=x_N(t)$ analytically in the form of an inner solution that can be patched/matched to the numerically-computed `outer' solution.  The notes below explain the details of this idea.
+
+Introduce the inner variables
+\bea
+\zeta & = & \frac{x_N(t) - x}{\phi(\beta)},\quad
+H = \frac{h}{\psi(\beta)},
+\eea
+where $\phi(\beta)$ and $\psi(\beta)$ are functions to be determined but are assumed to have the properties 
+$\phi(\beta) \rightarrow 0$ and $\psi(\beta) \rightarrow 0$ as $\beta \rightarrow 0$.  These lead to the transformations
+\bea
+\frac{\partial}{\partial x}  \rightarrow  - \frac{1}{\phi} \frac{\partial}{\partial \zeta},\quad
+\frac{\partial}{\partial t}  \rightarrow  \frac{\partial}{\partial t} + \frac{1}{\phi} \frac{dx_N}{dt} \frac{\partial}{\partial \zeta}.
+\eea
+With these the PDE transforms to
+\bea
+\frac{\partial H}{\partial t} + \frac{1}{\phi} \frac{dx_N}{dt} \frac{\partial H}{\partial \zeta} & = & \frac{\psi}{\phi^2} \frac{\partial}{\partial \zeta} 
+\left[ \left( \frac{1}{3} \psi^2 H^3 + \beta H \right) \frac{\partial H}{\partial \zeta} \right].
+\eea
+Among the four terms that scale like $1$, $\phi^{-1}$, $\psi^3 \phi^{-2}$ and $\psi \beta \phi^{-2}$, respectively, we find that the choice
+\bea
+\phi = \beta^{3/2},\quad
+\psi = \beta^{1/2},
+\eea
+leads to the inner problem for the PDE
+\bea
+\beta^{3/2} \frac{\partial H}{\partial t} + \frac{dx_N}{dt} \frac{\partial H}{\partial \zeta} & = & \frac{\partial}{\partial \zeta} 
+\left[ \left( \frac{1}{3} H^3 + H \right) \frac{\partial H}{\partial \zeta} \right],
+\eea
+which gives the leading-order balance
+\bea
+\label{eq:leading_order_inner}
+\frac{dx_N}{dt} \frac{\partial H}{\partial \zeta} & = & \frac{\partial}{\partial \zeta} 
+\left[ \left( \frac{1}{3} H^3 + H \right) \frac{\partial H}{\partial \zeta} \right].
+\eea
+This inner problem is subject to boundary conditions 
+\bea
+H(\zeta=0) & = & 0, \\
+\frac{\partial H}{\partial \zeta}(\zeta=0) & = & \frac{dx_N}{dt}.
+\eea
+
+The equation~(\ref{eq:leading_order_inner}) can be integrated once to give
+\bea
+\frac{dx_N}{dt} H & = & \left( \frac{1}{3} H^3 + H \right) \frac{dH}{d\eta} + c_0,
+\eea
+where $c_0$ is a constant.  The boundary conditions require $c_0=0$.  We then have
+\bea
+\frac{dx_N}{dt} & = & \left( \frac{1}{3} H^2 + 1 \right) \frac{dH}{d\eta} = \frac{d}{d\zeta} \left[ \frac{1}{9} H^3 + H \right]
+\eea
+One further integration and application of boundary conditions yields
+\bea
+\label{eq:inner_solution}
+H \left( \frac{1}{9} H^2 + 1 \right) & = & \frac{dx_N}{dt} \zeta,
+\eea
+which can be interpreted as an equation for $H$ local to the leading-edge of the gravity current in terms of the front speed $dx_N/dt$.
+
+\subsection{Numerical Matching Procedure}
+
+We shall assume the existence of an overlap, or matching region where the outer solution characterized by the original PDE for $h$ agrees
+asymptotically with the inner solution in the limit $\beta \rightarrow 0$.    Suppose that $x_M$ is such a value of $x$ in this region and then define
+a corresponding inner variable $\zeta_M$ by 
+\bea
+x_M & = & x_N(t) - \beta^{\frac{3}{2}} \zeta_M.
+\eea
+Then also define
+\bea
+h_M = h(x=x_M,t),\quad
+H_M = H(\zeta=\zeta_M,t)
+\eea
+
+At this location we impose conditions matching the heights and slopes of the inner and outer solutions
+\bea
+\label{eq:match_h}
+h_M & = & \beta^{\frac{1}{2}} H_M,\\
+\label{eq:match_dhdx}
+\frac{\partial h}{\partial x}(x=x_M,t) & = & -\frac{1}{\beta} \frac{\partial H}{\partial \zeta}(\zeta = \zeta_M),
+\eea
+where we have introduced $H_M = H(\zeta= \zeta_M)$ as the value of the inner solution at the matching coordinate.  
+From the inner solution 
+\bea
+\left( \frac{1}{3} H^2 + 1 \right) \frac{dH}{d\zeta} & = & \frac{dx_N}{dt},
+\eea
+which allows us to rewrite the condition~(\ref{eq:match_dhdx}) as
+\bea
+\frac{dx_N}{dt} & = & - \beta \left( \frac{1}{3} H_M^2 + 1 \right) \frac{\partial h}{\partial x}(x=x_M,t).
+\eea
+Note that the inner solution~(\ref{eq:inner_solution}) allows us to write
+\bea
+\zeta_M & = & \frac{H_M \left( \frac{1}{9} H_M^2 + 1 \right) }{\frac{dx_N}{dt}},\nonumber \\
+ & = & - \frac{1}{\beta} \frac{H_M \left( \frac{1}{9} H_M^2 + 1 \right) }{ \left( \frac{1}{3} H_M^2 + 1 \right) \frac{\partial h}{\partial x}(x=x_M,t) } 
+\eea
+
+{\bf Summary of Procedure:} In summary, we generate a numerical `composite' solution by solving numerically the outer problem
+\bea
+\label{eq:outer_h}
+\frac{\partial h}{\partial t} & = & \frac{\partial}{\partial x} \left[ f(h)\frac{\partial h}{\partial x} \right], \hspace{0.25in} \mbox{on $0 < x < x_M(t)$},\\
+\label{eq:outer_bc1}
+\frac{\partial h}{\partial x}(x=0,t) & = & 0,\\
+\label{eq:outer_bc2}
+h(x=x_M(t)) & = & h_M,
+\eea
+where the leading-edge of the gravity current, $x_N(t)$, satisfies
+\bea
+\label{eq:outer_bc3}
+\frac{dx_N}{dt} & = & - \beta \left( \frac{1}{3} H^2_M + 1 \right) \left. \frac{\partial h}{\partial x} \right|_{x=x_M},
+\eea
+and the values $x_M$, $\zeta_M$, $h_M$ and $H_M$ are obtained by fixing one of them (e.g.~fixing $H_M$) and determining the other three using the equations
+\bea
+\label{eq:hM}
+h_M & = & \beta^{\frac{1}{2}} H_M, \\
+\label{eq:xM}
+x_M(t) & = & x_N(t) - \beta^{\frac{3}{2}} \zeta_M,\\
+\label{eq:zM}
+\zeta_M & = & - \frac{1}{\beta} \frac{H_M \left( \frac{1}{9} H_M^2 + 1 \right) }{ \left( \frac{1}{3} H_M^2 + 1 \right) \frac{\partial h}{\partial x}(x=x_M,t) }.
+\eea
+The inner solution on the region $x_M < x < x_N$ is determined by the inner solution formula~(\ref{eq:inner_solution}).
+
+The outer solution applies on $0 < x < x_M(t)$ and it will be convenient to map this domain to a fixed domain using the spatial coordinate $s=x/x_M(t)$ where $s \in [0,1]$.  In terms of this fixed domain we have
+\bea
+\label{eq:outer_h_fixed_domain}
+\frac{\partial h}{\partial t} & = & \frac{s}{x_M} \frac{dx_M}{dt} \frac{\partial h}{\partial s} + \frac{1}{x_M^2} \frac{\partial}{\partial s} \left[ f(h)\frac{\partial h}{\partial s} \right], \hspace{0.25in} \mbox{on $0 < s < 1$},\\
+\label{eq:outer_bc1_fixed_domain}
+\frac{\partial h}{\partial x}(s=0,t) & = & 0,\\
+\label{eq:outer_bc2_fixed_domain}
+h(s=1) & = & h_M,
+\eea
+where
+\bea
+\label{eq:outer_bc3_fixed_domain}
+\frac{dx_N}{dt} & = & - \beta \left( \frac{1}{3} H^2_M + 1 \right) \frac{1}{x_M} \left. \frac{\partial h}{\partial s} \right|_{s=1}.
+\eea
+Note that the PDE in~(\ref{eq:outer_h_fixed_domain}) requires that we have access to $x_M$ and $dx_M/dt$, while the boundary condition~(\ref{eq:outer_bc3_fixed_domain}) 
+expresses the equation for the evolution of the actual leading-edge location $x_N(t)$.
+
+
+{\bf Outline of algorithm: {\color{red}{DMA still thinking about some of these ideas ...}}}
+\begin{enumerate}
+\item Suppose we have a solution at time $t=t_i$ so that $x_N(t_i)$ is known and $h(s,t=t_i)$ for $0 < s < 1$ is known.  
+At the beginning this would correspond to a given initial condition at $t=t_i$.  Later, this will represent a solution obtained at a previous time step.
+%
+\item Choose a value $\zeta_M$ to be fixed throughout the calculation.   Then $x_M(t_i)$ can be obtained from equation~(\ref{eq:xM}) since $x_N(t_i)$ is known.  Further
+observe that if $\zeta_M$ is fixed throughout the calculation it follows from equation~(\ref{eq:xM}) that $d x_M/dt = d x_N/dt$ for all time.
+%
+\item Next, we obtain $h_M(t_i)$ by computing $h(x_M(t_i),t_i)$ and subsequently can use equation~(\ref{eq:hM}) to obtain $H_M(t_i)$.
+%
+\item It would then follow from equation~(\ref{eq:zM}) that
+\bea
+\frac{\partial h}{\partial x}(x=x_M(t_i),t_i)  = \frac{1}{x_M} \frac{\partial h}{\partial s}(s=1,t_i)& = & - \frac{1}{\beta} \frac{H_M \left( \frac{1}{9} H_M^2 + 1 \right) }{ \left( \frac{1}{3} H_M^2 + 1 \right) \zeta_M }.
+\eea
+At this point we must verify that the right-hand-side of this expression, which is known since values for $H_M$ and $\zeta_M$ are already specified.
+Also, however, the profile $h(s,t_i)$ defines, say by a finite difference approximation, the derivative $\frac{\partial h}{\partial x}(x=x_M(t_i),t_i)$.  Thus, we
+must specify a tolerance within which these two quantities must agree.  If they fall outside of the tolerance, then some further iteration must be taken to 
+achieve the required agreement.
+%
+\item Once suitable $x_M$, $h_M$, $\zeta_M$ and $H_M$ are obtained, solve numerically (e.g. finite difference method, method of lines) the equations~(\ref{eq:outer_h_fixed_domain}) 
+subject to boundary conditions~(\ref{eq:outer_bc1_fixed_domain}), (\ref{eq:outer_bc2_fixed_domain}) and~(\ref{eq:outer_bc3_fixed_domain}) to advance the solution to the next time step and repeat the steps starting from the top.
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{figure}[h!]
+%\begin{center}
+%\includegraphics[width=4.5in]{TXAS_fig9.eps}
+%\caption{This plot shows the predicted amount of fluid depleted from the PoLTF by evaporation of the PrLTF.  The parameter values are the same as those for Figure~{\protect\ref{time_profile}}.}
+%\label{thickness_lost}
+%\end{center}
+%\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\begin{table}
+%\begin{center}
+%\begin{tabular}{cccc c cc cc}
+%\multicolumn{9}{c}{Varying $\delta$ and $\bar{Da}$ with $A=10^{-1}$}\\\hline
+%$\delta$ & $\bar{Da}$  & $h_{SS}$  & $t_{E2}$  &$t_{SS}$ & $w'_2$                  & $w'_3$                 & $T_{Lost}$       & $dT_{Lost}/dt$ \\
+%              &                    &                  &                &                &                              &                             &    $(t=t_{SS})$  &  $(t>t_{SS})$   \\
+%              &                    &  $\mu$m   &  $s$        & $s$          & $\mu$m s$^{-1}$ & $\mu$m s$^{-1}$ & $ \mu$m           & $\mu$m s$^{-1}$ \\ \hline
+%0.00024    & 0.0071                     & 0.14      & 9.47    & 10.62 & $-95.62$    & 797.87     & 0.030    & 0.18 \\
+%0               & $7.1\times 10^{-7}$ &  0.0057 & 10.87 & 11.05  & $-281.16$  & 4851.85   & 0.0033  & 0.23\\
+%$10^{-9}$  & $7.1\times 10^{-7}$ & 0.0058 & 10.87  & 11.05 & $-280.81$   & 4815.32  & 0.0032  & 0.23\\
+%($\phi=.75$) & $7.1\times 10^{-7}$ & 0.0063 & 10.84  & 11.05 & $-274.16$   & 4222.17 & 0.0026  & 0.17\\
+%($\phi=.44$) & $7.1\times 10^{-7}$ & 0.0075 & 10.80  & 11.05 & $-261.72$   & 3880.48 & 0.0017  & 0.10\\
+%$10^{-6}$  & $7.1\times 10^{-7}$ & 0.014   & 10.64  & 11.01 & $-216.12$   & 2593.51 & 0.00035 & 0.015\\
+%$10^{-3}$  & 0.0071                     & 0.17     & 9.26    & 10.54 & $-86.71$     & 751.88   & 0.023     & 0.097\\
+%\end{tabular}\\[3 ex]
+%\end{center}
+%%
+%\begin{center}
+%\begin{tabular}{ccc cc cc cc}
+%\multicolumn{9}{c}{Varying $\delta$ and $\bar{Da}$ with $A=10^{-3}$}\\\hline
+%$\delta$ & $\bar{Da}$  & $h_{SS}$ & $t_{E2}$  &$t_{SS}$& $w'_2$ & $w'_3$& $T_{Lost}$ &$dT_{Lost}/dt$\\
+%              &       &                  &                &              &                 &                &    $(t=t_{SS})$           &  $(t>t_{SS})$   \\
+%&  &  $\mu$m &  $s$ & $s$ & $\mu$m s$^{-1}$ & $\mu$m s$^{-1}$ & $ \mu$m & $\mu$m s$^{-1}$ \\\hline
+%$0.00024$   & $0.0071$        & 0.029   & 3.90 & 11.01 & $-35.00$ &331.89 & 0.033 & 0.18\\
+%0                  & $7.1*10^{-7}$ & 0.0012 & 4.98 & 11.13 & $-37.30$ &363.28 & 0.032 & 0.24\\
+%$10^{-9}$    & $7.1*10^{-7}$ & 0.0012 & 4.98 & 11.13 & $-37.30$ &363.41 & 0.032 & 0.23\\
+%($\phi=0.75$) & $7.1*10^{-7}$ & 0.0014 & 4.96 & 11.13 & $-37.14$ &365.50 & 0.024 & 0.18\\
+%($\phi=0.44$) & $7.1*10^{-7}$ & 0.0016 & 4.87 & 11.13 & $-36.84$ &368.98 & 0.014 & 0.10\\
+%$10^{-6}$     & $7.1*10^{-7}$ & 0.0031 & 4.67 & 11.12 & $-35.86$ &371.31 & 0.0022 & 0.016\\
+%$10^{-3}$     & 0.0071            & 0.036  & 3.80  & 10.99 & $-35.03$ &334.23 & 0.020 & 0.099\\
+%\end{tabular}\\[3 ex]
+%\end{center}
+%\caption{These tables show the dependence of various quantities such as steady-state film thickness $h_{SS}$, the first exposure time $t_{E2}$ and steady-state time $t_{SS}$, opening rates $w_2'$ and $w_3'$ and thickness lost quantities as a function of the parameters $\delta$, $\bar{Da}$ and $A$.  
+%The other parameter values are $K = 3.9 \times 10^3$ (`very dry eye' case identified in Table 3), $E=1.2 \times 10^3$, $H=33.3$, 
+%$r_k=1$, $\epsilon = 0.01252$ and $p_v-P_H=0$.  Note that in the first column where a value of $\phi$ is listed $\delta$ is computed using the formula
+%$\delta=(-1+1/\phi) \Delta$; for the two cases listed we have $\delta=2.3 \times 10^{-8}$ ($\phi=0.75$) and $\delta=8.9 \times 10^{-8}$ ($\phi=0.44$).}
+%\end{table}
+
+
+\newpage
+\begin{thebibliography}{99}
+%
+\bibitem{Dalwadi_etal_2020}\textsc{Dalwadi, M.P., Waters, S.L., Byrne, H.M, \& Hewitt, I.J.} (2020)
+A mathematical framework for developing freezing protocols in the cryopreservation of cells.
+{\it SIAM J. Appl. Math}, {\bf 80}, 657--689.
+%
+\bibitem{GH2010}\textsc{Golding, M.J. \& Huppert, H.E.} (2010)
+The effect of confining impermeable boundaries on gravity currents in a porous medium.
+{\it J. Fluid Mech.} {\bf 649} 1--17.
+%
+\bibitem{Greenspan1978}\textsc{Greenspan, H.P.} (1978)
+On the motion of a small viscous droplet that wets a surface. 
+{\it J. Fluid Mech.} {\bf 84} 125--143.
+%
+\bibitem{Griffiths2000}\textsc{Griffiths, R.W.} (2000)
+The dynamics of lava flows.
+{\it Annu. Rev. Fluid Mech.} {\bf 32} 477--518.
+%
+\bibitem{H2003}\textsc{Hadjiconstantinou, N.G.} (2003)
+Comment on Cercignani's second-order slip coefficient.
+{\it Physics of Fluids} {\bf 15} 2352--2354.
+%
+\bibitem{Huppert1982a}\textsc{Huppert, H.E.} (1982a)
+The propagation of two-dimensional and axisymmetric viscous gravity currents over a rigid horizontal surface.
+{\it J. Fluid Mech.} {\bf 121} 43--58.
+%
+\bibitem{Huppert1982b}\textsc{Huppert, H.E.} (1982b)
+Flow and instability of a viscous current down a slope.
+{\it Nature} {\bf 300} 427--429.
+%
+\bibitem{Huppert2006}\textsc{Huppert, H.E.} (2006)
+Gravity currents: a personal perspective.
+{\it J. Fluid Mech.} {\bf 554} 299--322.
+%
+\bibitem{HSSS1982}\textsc{Huppert, H.E., Shepherd, J.B., Sigurdsson, H., \& Sparks, R.S.J.} (1982)
+On lava dome growth, with application to the 1979 lava extrusion of the Soufri\`{e}re of St. Vincent.
+{\it Journal of Volcanology and Geothermal Research}, {\bf 14}, 199-222.
+%
+\bibitem{LDC2015a}\textsc{Longo, S., Di Federico, V., \& Chiapponi, L.} (2015a)
+Propagation of viscous gravity currents inside confining boundaries: the effects of fluid rheology and channel geometry.
+{\it Proc. R. Soc. A} {\bf 471} 20150070
+%
+\bibitem{LDC2015b}\textsc{Longo, S., Di Federico, V., \& Chiapponi, L.} (2015b)
+Non-Newtonian power-law gravity currents propagating in confining boundaries.
+{\it Environ. Fluid Mech.} {\bf 15} 515--535.
+%
+\bibitem{NA2010}\textsc{Nong, K. \& Anderson, D.M.} (2010)
+Thin film evolution over a thin porous layer: modeling a tear film on a contact lens.
+{\it SIAM J. Appl. Math.} {\bf 70} 2771--2795.
+%
+\bibitem{TH2007}\textsc{Takagi, D. \& Huppert, H.E.} (2007)
+The effect of confining boundaries on viscous gravity currents.
+{\it J. Fluid Mech.}, {\bf 577}, 495--505.
+%
+\bibitem{TH2008}\textsc{Takagi, D. \& Huppert, H.E.} (2008)
+Viscous gravity currents inside confining channels and fractures.
+{\it Phys. Fluids}, {\bf 20}, 023104.
+doi: 10.1063/1.2883991
+%
+\bibitem{TH2010}\textsc{Takagi, D. \& Huppert, H.E.} (2010)
+Initial advance of long lava flows in open channels.
+{\it Journal of Volcanology and Geothermal Research}, {\bf 195}, 121--126.
+%
+
+
+\end{thebibliography}
+
+
+\end{document}
+
+
+
+
+
