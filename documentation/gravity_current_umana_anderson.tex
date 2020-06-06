@@ -433,10 +433,11 @@ Note that in this final expression $dr/ds$ is also evaluated at $r=1$ (where $s=
 \bea
 \left. \frac{dr}{ds} \right|_{r=1} & = & \frac{1}{\lambda} \left( e^\lambda - 1 \right).
 \eea
+Also note that $dr/ds \rightarrow 1$ as $\lambda \rightarrow 0$, which is the limit in which the uniform grid is recovered.
 
-In our numerical codes {\tt gc\_molND\_nonuniform\_s.m} and {\tt gc\_rhsNC\_nonuniform\_s.m} we introduce equally-spaced points in terms of the variable $r$ which 
-allows relatively straightforward expression of derivatives in terms of finite differences but with the grid points in terms of $s$ (and hence $x = s x_N(t)$) more tightly
-spaced near the leading edge of the gravity current.
+In our numerical codes {\tt gc\_molND\_nonuniform\_s.m} and {\tt gc\_rhsND\_nonuniform\_s.m} we introduce equally-spaced points in terms of the variable $r$ which 
+allows relatively straightforward finite difference expressions for spatial derivatives but with the grid points in terms of $s$ (and hence $x = s x_N(t)$) more tightly
+spaced near the leading edge of the gravity current with the parameter $\lambda$ that helps control the refinement.
 
 
 
@@ -515,11 +516,11 @@ H(\zeta=0) & = & 0, \\
 
 The equation~(\ref{eq:leading_order_inner}) can be integrated once to give
 \bea
-\frac{dx_N}{dt} H & = & \left( \frac{1}{3} H^3 + H \right) \frac{dH}{d\eta} + c_0,
+\frac{dx_N}{dt} H & = & \left( \frac{1}{3} H^3 + H \right) \frac{dH}{d\zeta} + c_0,
 \eea
 where $c_0$ is a constant.  The boundary conditions require $c_0=0$.  We then have
 \bea
-\frac{dx_N}{dt} & = & \left( \frac{1}{3} H^2 + 1 \right) \frac{dH}{d\eta} = \frac{d}{d\zeta} \left[ \frac{1}{9} H^3 + H \right]
+\frac{dx_N}{dt} & = & \left( \frac{1}{3} H^2 + 1 \right) \frac{dH}{d\zeta} = \frac{d}{d\zeta} \left[ \frac{1}{9} H^3 + H \right]
 \eea
 One further integration and application of boundary conditions yields
 \bea
@@ -607,10 +608,10 @@ Note that the PDE in~(\ref{eq:outer_h_fixed_domain}) requires that we have acces
 expresses the equation for the evolution of the actual leading-edge location $x_N(t)$.
 
 Converting this to a domain in which non-equally-spaced points can be implemented using the same relationship between $r$ and $s$ as used earlier gives
-This leads to the modified system
 \bea
 \label{eq:outer_h_fixed_domain_drds}
-\frac{\partial h}{\partial t} & = & \frac{s}{x_M} \frac{dx_M}{dt} \frac{dr}{ds} \frac{\partial h}{\partial r} + \frac{1}{x_M^2} \frac{dr}{ds} \frac{\partial}{\partial r} \left[ f(h) \frac{dr}{ds} \frac{\partial h}{\partial r} \right], \hspace{0.25in} \mbox{on $0 < r < 1$},\\
+\frac{\partial h}{\partial t} & = & \frac{s}{x_M} \frac{dx_M}{dt} \frac{dr}{ds} \frac{\partial h}{\partial r} + \frac{1}{x_M^2} \frac{dr}{ds} \frac{\partial}{\partial r} 
+\left[ f(h) \frac{dr}{ds} \frac{\partial h}{\partial r} \right], \hspace{0.25in} \mbox{on $0 < r < 1$},\\
 \label{eq:outer_bc1_fixed_domain_drds}
 \frac{\partial h}{\partial r}(r=0,t) & = & 0,\\
 \label{eq:outer_bc2_fixed_domain_drds}
