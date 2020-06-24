@@ -565,21 +565,22 @@ Note that the inner solution~(\ref{eq:inner_solution}) allows us to write
  & = & - \frac{1}{\beta} \frac{H_M \left( \frac{1}{9} H_M^2 + 1 \right) }{ \left( \frac{1}{3} H_M^2 + 1 \right) \frac{\partial h}{\partial x}(x=x_M,t) } 
 \eea
 
-{\bf Summary of Procedure:} In summary, we generate a numerical `composite' solution by solving numerically the outer problem
+{\bf Summary of Procedure (Possible Version 1):} In summary, we generate a numerical `composite' solution by solving numerically the outer problem
 \bea
 \label{eq:outer_h}
 \frac{\partial h}{\partial t} & = & \frac{\partial}{\partial x} \left[ f(h)\frac{\partial h}{\partial x} \right], \hspace{0.25in} \mbox{on $0 < x < x_M(t)$},\\
 \label{eq:outer_bc1}
 \frac{\partial h}{\partial x}(x=0,t) & = & 0,\\
 \label{eq:outer_bc2}
-h(x=x_M(t)) & = & h_M,
+h(x=x_M(t)) & = & h_M(t),
 \eea
 where the leading-edge of the gravity current, $x_N(t)$, satisfies
 \bea
 \label{eq:outer_bc3}
-\frac{dx_N}{dt} & = & - \beta \left( \frac{1}{3} H^2_M + 1 \right) \left. \frac{\partial h}{\partial x} \right|_{x=x_M},
+\frac{dx_N}{dt} & = & - \beta \left( \frac{1}{3} H^2_M + 1 \right) \left. \frac{\partial h}{\partial x} \right|_{x=x_M}.
 \eea
-and the values $x_M$, $\zeta_M$, $h_M$ and $H_M$ are obtained by fixing one of them (e.g.~fixing $H_M$) and determining the other three using the equations
+Recall in the present context that $f(h) = \frac{1}{3} h^3 + \beta h$.
+The values $x_M$, $\zeta_M$, $h_M$ and $H_M$ are obtained by fixing one of them (e.g.~fixing $\zeta_M$ appears to have some advantages but perhaps there are advantages to fixing a different one, such as $H_M$) and determining the other three using the equations
 \bea
 \label{eq:hM}
 h_M & = & \beta^{\frac{1}{2}} H_M, \\
@@ -588,7 +589,8 @@ x_M(t) & = & x_N(t) - \beta^{\frac{3}{2}} \zeta_M,\\
 \label{eq:zM}
 \zeta_M & = & - \frac{1}{\beta} \frac{H_M \left( \frac{1}{9} H_M^2 + 1 \right) }{ \left( \frac{1}{3} H_M^2 + 1 \right) \frac{\partial h}{\partial x}(x=x_M,t) }.
 \eea
-The inner solution on the region $x_M < x < x_N$ is determined by the inner solution formula~(\ref{eq:inner_solution}).
+The inner solution on the region $x_M < x < x_N$ is determined by the inner solution formula~(\ref{eq:inner_solution}).  Note that unless one of these quantities is fixed in time, 
+in general each of $x_M$, $\zeta_M$, $h_M$ and $H_M$ are functions of time.
 
 The outer solution applies on $0 < x < x_M(t)$ and it will be convenient to map this domain to a fixed domain using the spatial coordinate $s=x/x_M(t)$ where $s \in [0,1]$.  In terms of this fixed domain we have
 \bea
@@ -642,10 +644,9 @@ $s$ (and $x= s x_M(t)$) which give more resolution near the leading-edge of the 
 
 {\bf Outline of algorithm: {\color{red}{DMA still thinking about some of these ideas ...}}}
 \begin{enumerate}
-\item Suppose we have a solution at time $t=t_i$ so that $x_N(t_i)$ is known and $h(s,t=t_i)$ for $0 < s < 1$ is known.  
-At the beginning this would correspond to a given initial condition at $t=t_i$.  Later, this will represent a solution obtained at a previous time step.
+\item Suppose we have a solution at some initial time $t=t_i$ so that $x_N(t_i)$ is known and $h(x,t=t_i)$ for $0 < x < x_N(t_i)$ is known.  
 %
-\item Choose a value $\zeta_M$ to be fixed throughout the calculation.   Then $x_M(t_i)$ can be obtained from equation~(\ref{eq:xM}) since $x_N(t_i)$ is known.  Further
+\item Choose a value $\zeta_M$ that is meant to be fixed throughout the calculation.   Then $x_M(t_i)$ can be obtained from equation~(\ref{eq:xM}) since $x_N(t_i)$ is known.  Further
 observe that if $\zeta_M$ is fixed throughout the calculation it follows from equation~(\ref{eq:xM}) that $d x_M/dt = d x_N/dt$ for all time.
 %
 \item Next, we obtain $h_M(t_i)$ by computing $h(x_M(t_i),t_i)$ and subsequently can use equation~(\ref{eq:hM}) to obtain $H_M(t_i)$.
@@ -655,13 +656,156 @@ observe that if $\zeta_M$ is fixed throughout the calculation it follows from eq
 \frac{\partial h}{\partial x}(x=x_M(t_i),t_i)  = \frac{1}{x_M} \frac{\partial h}{\partial s}(s=1,t_i)& = & - \frac{1}{\beta} \frac{H_M \left( \frac{1}{9} H_M^2 + 1 \right) }{ \left( \frac{1}{3} H_M^2 + 1 \right) \zeta_M }.
 \eea
 At this point we must verify that the right-hand-side of this expression, which is known since values for $H_M$ and $\zeta_M$ are already specified, matches the left-hand-side.
-That is, observe that the known profile $h(s,t_i)$ defines, say by a finite difference approximation, the derivative $\frac{\partial h}{\partial x}(x=x_M(t_i),t_i)$.  Thus, we
+That is, observe that the known profile $h(x,t_i)$ defines, say by a finite difference approximation, the derivative $\frac{\partial h}{\partial x}(x=x_M(t_i),t_i)$.  Thus, we
 must specify a tolerance within which these two quantities must agree.  If they fall outside of the tolerance, then some further iteration must be taken to 
-achieve the required agreement.
+achieve the required agreement.   Possibly the initial condition could be modified or the solution approach could be restarted with a different choice for $\zeta_M$.
 %
-\item Once suitable $x_M$, $h_M$, $\zeta_M$ and $H_M$ are obtained, solve numerically (e.g. finite difference method, method of lines) the equations~(\ref{eq:outer_h_fixed_domain}) 
-subject to boundary conditions~(\ref{eq:outer_bc1_fixed_domain}), (\ref{eq:outer_bc2_fixed_domain}) and~(\ref{eq:outer_bc3_fixed_domain}) to advance the solution to the next time step and repeat the steps starting from the top.
+\item Once suitable $x_M(t_i)$, $h_M(t_i)$, $\zeta_M(t_i)$ and $H_M(t_i)$ are obtained, solve numerically (e.g. finite difference method, method of lines) the equations~(\ref{eq:outer_h_fixed_domain_drds}) 
+subject to boundary conditions~(\ref{eq:outer_bc1_fixed_domain_drds}), (\ref{eq:outer_bc2_fixed_domain_drds}) and~(\ref{eq:outer_bc3_fixed_domain_drds}) to advance the solution to the next time step, $t=t_{i+1}$. Specifically advancing one time step would provide $x_N(t_{i+1})$, $h(x,t_{i+1})$ for all $x$ up to but (possibly?) not including $x_M$.  Then,
+determine the next round of values $h_M$, $H_M$, $x_M$ assuming $\zeta_M$ fixed???
 \end{enumerate}
+
+{\bf Summary Procedure (Version 2)}: As an alternate approach to that partially outlined above we can revisit the problem
+\bea
+\label{eq:outer_h_v2}
+\frac{\partial h}{\partial t} & = & \frac{\partial}{\partial x} \left[ f(h)\frac{\partial h}{\partial x} \right], \hspace{0.25in} \mbox{on $0 < x < x_M(t)$},\\
+\label{eq:outer_bc1_v2}
+\frac{\partial h}{\partial x}(x=0,t) & = & 0,\\
+\label{eq:outer_bc2_v2}
+h(x=x_M(t)) & = & h_M(t),
+\eea
+where the leading-edge of the gravity current, $x_N(t)$, satisfies
+\bea
+\label{eq:outer_bc3_v2}
+\frac{dx_N}{dt} & = & - \beta \left( \frac{1}{3} H^2_M + 1 \right) \left. \frac{\partial h}{\partial x} \right|_{x=x_M}.
+\eea
+Recall that in the present context $f(h) = \frac{1}{3} h^3 + \beta h$.
+Suppose we fix the value $\zeta_M$.  Recall that we have the relationships
+\bea
+\label{eq:hM_v2}
+h_M & = & \beta^{\frac{1}{2}} H_M, \\
+\label{eq:xM_v2}
+x_M(t) & = & x_N(t) - \beta^{\frac{3}{2}} \zeta_M,\\
+\label{eq:zM_v2}
+\zeta_M & = & - \frac{1}{\beta} \frac{H_M \left( \frac{1}{9} H_M^2 + 1 \right) }{ \left( \frac{1}{3} H_M^2 + 1 \right) \frac{\partial h}{\partial x}(x=x_M,t) }.
+\eea
+Note that by fixing $\zeta_M$ it follows that $dx_M/dt = dx_N/dt$.
+Again note that the inner solution on the region $x_M < x < x_N$ is determined by the inner solution formula~(\ref{eq:inner_solution}).
+
+In this context $H_M$ is a function of time for which we can obtain an expression for $dH_M/dt$.   In particular, rearranging equation~(\ref{eq:zM_v2}) gives
+\bea
+\label{eq:zM_v2_rearranged}
+-\beta \zeta_M \left( \frac{1}{3} H_M^2 + 1 \right) \frac{\partial h}{\partial x}(x=x_M,t) = H_M \left( \frac{1}{9} H_M^2 + 1 \right)
+\eea
+We can compute the time derivative of this quantity to obtain an expression for $dH_M/dt$.  First note that
+\bea
+\frac{d}{dt} \left[ \frac{\partial h}{\partial x}(x=x_M,t) \right] = \left. \frac{\partial^2 h}{\partial x^2} \right|_{x=x_M} \frac{dx_M}{dt} + \left. \frac{\partial^2 h}{\partial t \partial x} \right|_{x=x_M},
+\eea
+where
+\bea
+\left. \frac{\partial^2 h}{\partial t \partial x} \right|_{x=x_M} & = & \left. \frac{\partial^2}{\partial x^2} \left[ f(h) \frac{\partial h}{\partial x} \right] \right|_{x=x_M},\\
+ & = & \left. \frac{\partial}{\partial x} \left[ f(h) \frac{\partial^2 h}{\partial x^2} + f'(h) \left( \frac{\partial h}{\partial x} \right)^2 \right]\right|_{x=x_M},\\
+  & = & \left. \left[ f(h) \frac{\partial^3 h}{\partial x^3} + 3 f'(h) \frac{\partial h}{\partial x} \frac{\partial^2 h}{\partial x^2} + f''(h) \left( \frac{\partial h}{\partial x} \right)^3 \right]\right|_{x=x_M}
+\eea
+Remember that since $f(h) = \frac{1}{3} h^3 + \beta h$ we have $f'(h) = h^2 + \beta$ and $f''(h) = 2h$.
+Returning to equation~(\ref{eq:zM_v2_rearranged}) and computing a time derivative of both sides gives
+\bea
+-\beta \zeta_M \left\{ \left( \frac{1}{3} H_M^2 + 1 \right) \frac{d}{dt} \left[ \frac{\partial h}{\partial x}(x=x_M,t) \right] + \frac{2}{3} H_M \frac{dH_M}{dt} \left. \frac{\partial h}{\partial x}\right|_{x=x_M} \right\}
+ = \left( \frac{1}{3} H_M^2 + 1 \right) \frac{dH_M}{dt}
+\eea
+Solving for $dH_M/dt$ gives
+\bea
+\frac{dH_M}{dt} & = & \frac{-\beta \zeta_M \left( \frac{1}{3} H_M^2 + 1 \right) \left[ \left. \frac{\partial^2 h}{\partial x^2} \right|_{x=x_M} \frac{dx_M}{dt} + \left. \frac{\partial^2 h}{\partial t \partial x} \right|_{x=x_M}\right] }{\left( \frac{1}{3} H_M^2 + 1 \right) + \frac{2}{3} \beta \zeta_M H_M  \left. \frac{\partial h}{\partial x}\right|_{x=x_M} }
+\eea
+For the moment let's write this as
+\bea
+\frac{dH_M}{dt} & = & {\cal F}(\beta,\zeta_M,H_M,h,\partial h/\partial x, \partial^2 h/\partial x^2 , \partial^3 h/\partial x^3),
+\eea
+where $h$ and its derivatives are all evaluated at $x=x_M$.
+Recall that
+\bea
+\frac{dx_M}{dt} & = & - \beta \left( \frac{1}{3} H^2_M + 1 \right) \left. \frac{\partial h}{\partial x} \right|_{x=x_M}
+\eea
+
+The outer solution applies on $0 < x < x_M(t)$ and it will be convenient to map this domain to a fixed domain using the spatial coordinate $s=x/x_M(t)$ where $s \in [0,1]$.  In terms of this fixed domain we have
+\bea
+\label{eq:outer_h_fixed_domain_v2}
+\frac{\partial h}{\partial t} & = & \frac{s}{x_M} \frac{dx_M}{dt} \frac{\partial h}{\partial s} + \frac{1}{x_M^2} \frac{\partial}{\partial s} \left[ f(h)\frac{\partial h}{\partial s} \right], \hspace{0.25in} \mbox{on $0 < s < 1$},\\
+\label{eq:outer_bc1_fixed_domain_v2}
+\frac{\partial h}{\partial s}(s=0,t) & = & 0,\\
+\label{eq:outer_bc2_fixed_domain_v2}
+h(s=1) & = & h_M(t),
+\eea
+where
+\bea
+\label{eq:outer_bc3_fixed_domain_v2}
+\frac{dx_N}{dt} & = & - \beta \left( \frac{1}{3} H^2_M + 1 \right) \frac{1}{x_M} \left. \frac{\partial h}{\partial s} \right|_{s=1}.
+\eea
+and
+\bea
+\label{eq:outer_bc_hm_ode}
+\frac{1}{\beta^{1/2}} \frac{dh_M}{dt} = \frac{dH_M}{dt} & = & {\cal F}(\beta,\zeta_M,H_M,h,\partial h/\partial x, \partial^2 h/\partial x^2 , \partial^3 h/\partial x^3),
+\eea
+Note that the PDE in~(\ref{eq:outer_h_fixed_domain_v2}) requires that we have access to $x_M$, $dx_M/dt$ and $h_M(t)$.  The boundary condition~(\ref{eq:outer_bc3_fixed_domain_v2}) 
+expresses the equation for the evolution of the actual leading-edge location $x_N(t)$ but with $\zeta_M$ assumed fixed we have $dx_M/dt = dx_N/dt$.  Finally, the time dependent 
+$h_M(t)$ is obtained by solving simultaneously the ODE~(\ref{eq:outer_bc_hm_ode}) for $h_M$.  Note that the coordinate transformation gives
+\bea
+\frac{\partial h}{\partial x} & = & \frac{1}{x_M} \frac{\partial h}{\partial s},\\
+\frac{\partial^2 h}{\partial x^2} & = & \frac{1}{x_M^2} \frac{\partial^2 h}{\partial s^2},\\
+\frac{\partial^3 h}{\partial x^3} & = & \frac{1}{x_M^3} \frac{\partial^3 h}{\partial s^3}.
+\eea
+
+Converting this to a domain in which non-equally-spaced points can be implemented using the same relationship between $r$ and $s$ as used earlier gives
+\bea
+\label{eq:outer_h_fixed_domain_drds_v2}
+\frac{\partial h}{\partial t} & = & \frac{s}{x_M} \frac{dx_M}{dt} \frac{dr}{ds} \frac{\partial h}{\partial r} + \frac{1}{x_M^2} \frac{dr}{ds} \frac{\partial}{\partial r} 
+\left[ f(h) \frac{dr}{ds} \frac{\partial h}{\partial r} \right], \hspace{0.25in} \mbox{on $0 < r < 1$},\\
+\label{eq:outer_bc1_fixed_domain_drds_v2}
+\frac{\partial h}{\partial r}(r=0,t) & = & 0,\\
+\label{eq:outer_bc2_fixed_domain_drds_v2}
+h(r=1) & = & h_M,
+\eea
+where
+\bea
+\label{eq:outer_bc3_fixed_domain_drds_v2}
+\frac{dx_N}{dt} & = & - \beta \left( \frac{1}{3} H^2_M + 1 \right)  \frac{1}{x_M} \frac{dr}{ds} \left. \frac{\partial h}{\partial r} \right|_{r=1},
+\eea
+and 
+\bea
+\label{eq:outer_bc_hm_ode_drds}
+\frac{1}{\beta^{1/2}} \frac{dh_M}{dt} = \frac{dH_M}{dt} & = & {\cal F}(\beta,\zeta_M,H_M,h,\partial h/\partial x, \partial^2 h/\partial x^2 , \partial^3 h/\partial x^3),
+\eea
+where $h$ and its derivatives are evaluated at $r=1$.  In terms of the new coordinate we have 
+\bea
+\frac{\partial h}{\partial s} & = & \frac{\partial h}{\partial r} \frac{dr}{ds}, \\
+\frac{\partial^2 h}{\partial s^2} & = & \frac{\partial^2 h}{\partial r^2} \left( \frac{dr}{ds} \right)^2 + \frac{\partial h}{\partial r} \frac{d^2r}{ds^2},\\
+\frac{\partial^3 h}{\partial s^3} & = & \frac{\partial^3 h}{\partial r^3} \left( \frac{dr}{ds} \right)^3 + 3 \frac{\partial^2 h}{\partial r^2} \frac{dr}{ds} \frac{d^2 r}{ds^2} + \frac{\partial h}{\partial r} \frac{d^3r}{ds^3}.
+\eea
+{\color{red}{Double-check these!}}
+Here, as before, we have
+\bea
+s & = & \frac{1- \exp (-\lambda r)}{1 - \exp (-\lambda)},
+\eea
+or equivalently
+\bea
+r & = & - \frac{1}{\lambda} \ln \left[ 1 - s (1-e^{-\lambda}) \right],
+\eea
+and
+\bea
+\frac{dr}{ds} & = & \frac{ 1 - \exp(-\lambda) } {\lambda  (1 - s(1 - \exp(-\lambda)))},\\
+\frac{d^2r}{ds^2} & = &  \frac{ [1 - \exp(-\lambda) ]^2} {\lambda  [1 - s(1 - \exp(-\lambda))]^2} = \lambda \left( \frac{dr}{ds} \right)^2,\\
+\frac{d^3r}{ds^3} & = &  2 \frac{ [1 - \exp(-\lambda) ]^3} {\lambda  [1 - s(1 - \exp(-\lambda))]^3} = 2\lambda^2 \left( \frac{dr}{ds} \right)^3.
+\eea
+Again the idea is to implement this numerically using a uniform grid with respect to the variable $r$, which gives a nonuniformly distributed set of points in terms of
+$s$ (and $x= s x_M(t)$) which give more resolution near the leading-edge of the gravity current as the parameter $\lambda$ is increased.  
+
+
+{\color{red}{Some comments: (1) With the need of higher derivatives of $r$ with respect to $s$ it seems likely that our choice of $\lambda$ will be much more limited than in the original version of our calculations but maybe we can get by with smaller $\lambda$ in this context? (2) We need one-sided derivative formulas for the second and third derivatives that appear in ${\cal F}$.  (3) In principle this seems like it could be implemented in a pretty straightforward fashion to what we have done so far ...}}
+
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\begin{figure}[h!]
